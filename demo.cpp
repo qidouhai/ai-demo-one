@@ -7,8 +7,10 @@ using namespace std;
 
 #include <fstream>
 
+#include<sstream>
+
 //声明字符类
-class zifu{
+class zifu {
 public:
 	string 表示字符;
 };
@@ -150,7 +152,7 @@ public:
 
 
 //汉字主语谓语宾语
-class 单字主语:public 汉字 {
+class 单字主语 :public 汉字 {
 public:
 
 	string 单字主语名字;
@@ -241,7 +243,7 @@ public:
 };
 
 //据用途和语气，句子可以分为陈述句、疑问句、祈使句、感叹句。根据结构可分为单句和复句
-class 陈述句子 :public 句子{
+class 陈述句子 :public 句子 {
 public:
 
 };
@@ -266,9 +268,9 @@ public:
 class airobotsdemo {
 public:
 	string 名字;
-	int 编号;   
+	int 编号;
 	string 跑;
-	string 走; 
+	string 走;
 	string 爬;
 	string 睡觉;
 	string 躺;
@@ -281,48 +283,48 @@ protected:
 	class 身体 {
 	protected:
 		class 器官 {
+		protected:
+			class 细胞
+			{
+			public:
+				string 吃;
+				string 死亡;
+				string 寿命 = "5天";
+				string 饥饿;
+				string 遗传;
 			protected:
-				class 细胞
-				{
-				public:
-					string 吃;
-					string 死亡;
-					string 寿命="5天";
-					string 饥饿;
-					string 遗传;
-				protected:
-					int c_DNA=2;
-					int c_RNA=-1;
-					int c_酶=-1;
-					string 变异指数=0;
-					int 酶(string 维生素a,  string 其他) {
-						int m = 0;
-						m -= 1;
-						return m;
+				int c_DNA = 2;
+				int c_RNA = -1;
+				int c_酶 = -1;
+				string 变异指数 = 0;
+				int 酶(string 维生素a, string 其他) {
+					int m = 0;
+					m -= 1;
+					return m;
 
-					};
-					/*这里的蛋白质分子正常 ，则细胞正常，其中的过程暂时省略掉，只用其中的结果
-					和计算机的0,1思想是一样的*/
-					void 细胞正常表达(int 酶, int RNA, int DNA)
-					{
-						
-
-						//随机个0和1的组成
-						if (c_酶 == 酶) {
-							//酶是正常酶, 可以参与酶解链DNA工作
-							
-							if (DNA+RNA+酶==0 ) {
-								//当DNA RNA  酶 合计等于0时，基因正常表达
-								cout << "细胞功能正常,可以继续执行任务" << endl;
-							};
-						}
-						else {
-							变异指数 += 1;
-							cout << "细胞变异指数增加" << endl;
-						}
-
-					};
 				};
+				/*这里的蛋白质分子正常 ，则细胞正常，其中的过程暂时省略掉，只用其中的结果
+				和计算机的0,1思想是一样的*/
+				void 细胞正常表达(int 酶, int RNA, int DNA)
+				{
+
+
+					//随机个0和1的组成
+					if (c_酶 == 酶) {
+						//酶是正常酶, 可以参与酶解链DNA工作
+
+						if (DNA + RNA + 酶 == 0) {
+							//当DNA RNA  酶 合计等于0时，基因正常表达
+							cout << "细胞功能正常,可以继续执行任务" << endl;
+						};
+					}
+					else {
+						变异指数 += 1;
+						cout << "细胞变异指数增加" << endl;
+					}
+
+				};
+			};
 		};
 	};
 private:
@@ -337,7 +339,7 @@ private:
 //也就是器官衰竭的状态
 
 //天体
-class 星球{
+class 星球 {
 public:
 	string 名字;
 
@@ -379,31 +381,59 @@ void 主谓宾句子(string x,string y,string z) {
 };
 */
 
-	int test01(string xn,string mn){
-		int i=1;
-		ofstream  ofs;
-		ofs.open(i+".txt",ios::out|ios::binary);
-		string 字和意[2]={xn,mn};
-		ofs.write((const char *)&字和意[2],sizeof(字和意[2]));	
-		ofs.close();	
-		i+=1;
-		return i;	
-		}
-void test02(string cm,int paid){
-	ifstream ifs;
-	ifs.open(paid+".txt",ios::in|ios::binary);
-	string 字和意[2];
-	ifs.read((char * )&字和意[2],sizeof(字和意[2]));
-	if(cm==字和意[0])
-	{
-		
-	cout<<"AI:我学过汉字有"<<string(字和意[0])<<endl;
-	cout<<"AI:它们的意思是"<<字和意[1]<<endl;
-		}
-	ifs.close();
+int test01(string xn, string mn,int i=1) {
 	
-	}
+	stringstream filename;
+	filename << i;
+	ofstream  ofs;
+	ofs.open(filename.str() + ".txt", ios::out );
+	string 字和意中的字 = xn;
+	string 字和意中的意 = mn;
+	ofs << 字和意中的字 <<endl;
 
+	ofs << 字和意中的意 << endl;
+	ofs.close();
+	i += 1;
+	return i;
+}
+void test02(string cm, int paid) {
+	
+	for (int paid = 1; paid < 10; paid++) {
+		stringstream filename;
+		filename << paid;
+		ifstream ifs;
+
+
+
+		ifs.open(filename.str() + ".txt", ios::in);
+		if (!ifs.is_open()) {
+			cout << "系统：文件打开失败" << endl;
+			
+			return;
+		}
+		string 字和意中的字;
+		string 字和意中的意;
+		字和意中的字 = 字和意中的字 + filename.str();
+		字和意中的意 = 字和意中的意 + filename.str();
+		ifs >> 字和意中的字;
+
+		ifs >> 字和意中的意;
+
+		if (cm == 字和意中的字)
+		{
+
+			cout << "AI:我学过汉字有 : " << 字和意中的字 << endl;
+			cout << "AI:它的意思是 : " << 字和意中的意 << endl;
+			break;
+		}
+		else {
+			//cout << "AI:我知道这个字,并且调用了这个函数,但是文件中没有这些字，你可以教我认字吗";
+			continue;
+		}
+		ifs.close();
+	}
+	
+}
 
 int main() {
 	//开发计划
@@ -412,7 +442,7 @@ int main() {
 	//当无法正常使用时，需要进行机器人异常修正工作
 	//机器人出现思想动态变更时，会在开机时进行检测
 	//当机器人的正常值范围出现异常时，会开机进行报告
-	
+
 	//下面是随机测试
 	/*
 	单字主语 c;
@@ -424,85 +454,104 @@ int main() {
 	主谓宾句子(c.单字主语名字, k.单字谓语名字, l.单字宾语名字);
 	*/
 	//test01();
-	cout<<"AI:我是AI机器人,请问有什么可以帮助你的吗？"<<endl;
-	string messages="我还没有学过";
-	cin>>messages;
+	cout << "AI:我是AI机器人,请问有什么可以帮助你的吗？" << endl;
+	string messages = "123";
+	cin >> messages;
 	汉字 a;
-	if(messages!="我还没有学过")
+	a.关联字 = "888";
+	string yn = "我";
+	int paperid = 1;
+	if (messages != "123")
 	{
-		int paperid=1;
-		test02(messages,paperid);
-		cout<<"test02被调用"<<endl;
-		paperid+1;
+		
+		test02(messages, paperid);
+		
+		
+	}
+	else {
+		cout << messages << endl;
 	}
 
-	if(a.关联字==messages){
-		cout<<"AI:我知道这个字，它的大概意思是:"
-	<<a.意思;
+	if (a.关联字 == messages) {
+		cout << "AI:我知道这个字，但是忘记了大概意思是什么";
+
+	}
+	else
+	{
+		cout << "AI:我还没有学习更多内容，你可以教我吗？" << endl;
+		cout << "1为可以" << endl;
+		cout << "2为不可以" << endl;
+		int i = 0;
 		
-		}else
+		cin >> i;
+
+		if (i == 1)
 		{
-			cout<<"AI:我还没有学到这个内容，你可以教我吗？"<<endl;
-			cout<<"1为可以"<<endl;
-			cout<<"2为不可以"<<endl;
-			int i=0;
-			string yn="我";
-			cin>>i;
-			
-			if(i==1)
+
+			cout << "请输入单个汉字" << endl;
+			cin >> yn;
+			cout << "1，没有手误，继续教此汉字意思" << endl;
+
+			cout << "2，手误，换一个字教" << endl;
+
+			cout << "3,退出本次教学" << endl;
+			int t = 0;
+			cin >> t;
+			while (true)
 			{
-				cout<<"AI:请问 '"<< yn <<"' 这个汉字是什么意思啊"<<endl;
-				cout<<"1，教"<<"这个汉字"<<endl;
-				cout<<"2,想教其他汉字"<<endl;
-				
-				int t=0;
-				cin>>t;
-			while(true)
-			{
-				
-			
-				
-				if(t==1){
-					cout<<"请输入"<<yn<<"的汉语意思"<<endl;
-					cin>>a.意思;
-					cout<<"教学成功,"<<yn<<"的汉语意思是："<<a.意思<<endl;
-					cout<<"1.教错了，更正并重新输入"<<endl;
-					cout<<"2.没有输入手误，继续教更多内容"<<endl;
-					cout<<"3,退出本次教学"<<endl;
-					cin>>t;
-					if(t==2||t==3)
+
+
+
+				if (t == 1) {
+					cout << "请输入" << yn << "的汉语意思" << endl;
+					cin >> a.意思;
+					cout << "教学成功," << yn << "的汉语意思是：" << a.意思 << endl;
+					cout << "1.教错了，更正并重新输入" << endl;
+					cout << "2.没有输入手误，继续教更多内容" << endl;
+					cout << "3,退出本次教学" << endl;
+					cin >> t;
+					if (t == 2 || t == 3)
 					{
-						test01(yn, a.意思);
-						int paperid= test01(yn,a.意思);
-						cout<<"paperid= "<<paperid<<endl;
-					}
-				}else if(t==2){
-					
-						cout<<"请输入单个汉字"<<endl;
-						cin>>yn;
-						cout<<"1，没有手误，继续教此汉字意思"<<endl;
 						
-						cout<<"2，手误，换一个字教"<<endl;
-						cin>>t;
+						test01(yn, a.意思, paperid);
+						paperid = test01(yn, a.意思, paperid);
+						//cout << "paperid= " << paperid << endl;
 						
-					}else if(t==3){
-						break;}
-					else{
-						cout<<"输入有误，还请重新输入";
-						break;
 					}
-				
+				}
+				else if (t == 2) {
+
+					cout << "请输入单个汉字" << endl;
+					cin >> yn;
+					cout << "1，没有手误，继续教此汉字意思" << endl;
+
+					cout << "2，手误，换一个字教" << endl;
+
+					cout << "3,退出本次教学" << endl;
+					cin >> t;
+
+				}
+				else if (t == 3) {
+					break;
+				}
+				else {
+					cout << "输入有误，还请重新输入";
+					break;
+				}
+
 			}
-				}else if(i==2){
-					
-					cout<<"欢迎下次使用，按任意键退出";
-					exit;
-					}else
-					{
-						cout<<"输入有误，请重新输入";
-					}
 		}
-		
-		
-		
+		else if (i == 2) {
+
+			cout << "欢迎下次使用，按任意键退出";
+			exit;
 		}
+		else
+		{
+			cout << "输入有误，请重新输入";
+		}
+	}
+
+
+
+}
