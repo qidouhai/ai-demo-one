@@ -535,7 +535,8 @@ int main() {
 					break;
 				}
 				else {
-					cout << "输入有误，还请重新输入";
+					cout << "输入有误,请稍后再试";
+					cin >> t;
 					break;
 				}
 
@@ -548,7 +549,8 @@ int main() {
 		}
 		else
 		{
-			cout << "输入有误，请重新输入";
+			cout << "输入有误，请重新输入数字";
+			cin >> i;
 		}
 	}
 
