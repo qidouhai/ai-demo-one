@@ -21,6 +21,7 @@ public:
     //汉字的词性  意思  用法  关联的词语  关联的事物   关联的句子  
     string 词性;
     string 意思;
+    string 方块字;
     string 关联字;
     string 关联词;
     string 关联句;
@@ -381,20 +382,148 @@ void 主谓宾句子(string x,string y,string z) {
 };
 */
 
+void testfindback(string str, string chars, void  callback(size_t)) {
+    string strstr = str;
+    string strchars = chars;
+    size_t pos = strstr.find_first_of(strchars);
+    if (pos != string::npos) {
+        callback(pos);
+    }
+}
+//返回位置
+void myCallback(size_t index) {
+    cout << "位置" << index << endl;
+}
+
+//1句子存为历史记录 保存到文本
+void test04(string someworld, int id) {
+    string swd = someworld;
+    int imd = id;
+    string filename = to_string(imd);
+    string rehis = "历史记录";
+    string txt = ".txt";
+    ofstream ofs;
+    ofs.open(rehis + filename + txt, ios::in | ios::trunc);
+    ofs << swd << endl;
+    ofs.close();
+
+
+}
+
+//2句子去除标点符号  空格  求出汉字个数
+void test05(string str, void callback(size_t)) {
+    string sworlds = str;
+    size_t num = sworlds.length();
+   // int nums = static_cast<int>(sworlds.length());
+    string chars = "abcefgiklmopqrstuvwxyz!@#$%^&*-=\"?[]~|()_+'/{}`<>\\;:12345790 ";
+    testfindback(sworlds, chars, callback);
+}
+
+//提取字符串中的汉字及个数
+string test06(string s) {
+    string t;
+    int count = 0;
+    for (int i = 0; i < s.length(); i++) // UTF-8编码中，中文占用3个字节
+    {
+        if ((unsigned char)s[i] < 0x80) // ASCII字符的最高位为0，UTF-8编码为1字节
+        {
+            //t.append(s.substr(i, 1));
+           // t.append("/");
+        }
+        else if ((unsigned char)s[i] < 0xE0) // 中文的第一个字节的最高位为110，UTF-8编码为3字节
+        {
+            t.append(s.substr(i, 3));
+            t.append("/");
+        }
+        else if ((unsigned char)s[i] == 0x3001) {
+            // t.append(s.substr(i, 3));
+            t.append("/");
+            i += 2;
+            count--;
+        }
+        else // 中文的第一个字节的最高位为1110，UTF-8编码为3字节
+        {
+            t.append(s.substr(i, 3));
+            t.append("/");
+            i += 2;
+            count++;
+        }
+    }
+    //cout << t << endl;
+    return t;
+    //cout<<"汉字个数是"<<count<<endl;
+
+}
+
+//3句子分析 句子结构 句子成分 句子分解 
+
+//4将句子分割后的单个字 按照类格式存到临时文本
+
+     /*test01基本实现教过的文字内容保存到文本
+     而这一条要实现的是对话中的句子*/
+
+     //5根据单个字符 翻译成意思集合
+
+     //6通过模型或经验对句子意思进行优化，使其成为正确句子
+     /*这是理解句子的阶段，如果无法理解则需要用户详细描述*/
+
+
+     //字符串查找
+     /* string str1 = "好大啊";
+         string chars1 = "你们真的好吗？是不是真的啊？"
+         返回2
+         */
+void testfind(string str, string chars) {
+    string strstr = str;
+    string strchars = chars;
+    size_t pos = strstr.find_first_not_of(strchars);
+    if (pos != string::npos) {
+        cout << pos << endl;
+    }
+    else {
+        cout << "没有找到" << endl;
+    }
+}
+
+/*string str1 = "哈哈哈哈啊哈哈";
+string chars1 = "你们真的好吗？是不是真的啊？";
+返回8
+*/
+void testfind01(string str, string chars) {
+    string strstr = str;
+    string strchars = chars;
+    size_t pos = strstr.find_first_of(strchars);
+    if (pos != string::npos) {
+        cout << pos << endl;
+    }
+    else {
+        cout << "没有找到" << endl;
+    }
+}
+
 int test01(string xn, string mn, string nn, int i = 1) {
 
-    stringstream filename;
-    filename << i;
+    string filename;
+    filename = to_string(i);
     ofstream  ofs;
-    ofs.open(filename.str() + ".txt", ios::out | ios::trunc);
+    ofs.open(filename + ".txt", ios::out | ios::trunc);
     string 字和意中的字 = xn;
-    string 字和意中的字加分隔符 = "|"+xn+"|";
+    string 字和意中的字加分隔符 = "|" + xn + "|";
     string 字和意中的意 = mn;
+    string 字和意中的意加分隔符 = "|" + mn + "|";
     string 字中的词性 = nn;
+    string 字中的词性加分隔符 = "|" + nn + "|";
+    int inpaperid = i;
+    string inpaperid加分隔符 = "|" + filename + "|";
+
     ofs << 字和意中的字 << endl;
     ofs << 字和意中的字加分隔符 << endl;
     ofs << 字和意中的意 << endl;
+    ofs << 字和意中的意加分隔符 << endl;
     ofs << 字中的词性 << endl;
+    ofs << 字中的词性加分隔符 << endl;
+    ofs << inpaperid << endl;
+    ofs << inpaperid加分隔符 << endl;
     ofs.close();
     i += 1;
     return i;
@@ -403,130 +532,180 @@ int test01(string xn, string mn, string nn, int i = 1) {
 void 记录paperid(int i) {
     ofstream  ofs;
     ofs.open("paperid.txt", ios::out | ios::trunc);
-    int paperid=i-1;
-    ofs << paperid<< endl;
+    int paperid = i - 1;
+    ofs << paperid << endl;
     ofs.close();
 }
 int 读取paperid() {
     ifstream  ifs;
     ifs.open("paperid.txt", ios::in);
     int paperid;
-    ifs >> paperid ;
+    ifs >> paperid;
     ifs.close();
     return paperid;
 }
 void test03(int i) {
     string 字和意中的字;
+    string 字和意中的字加分隔符;
     string 字和意中的意;
+    string 字和意中的意加分隔符;
     string 字中的词性;
+    string 字中的词性加分隔符;
     string 学过的字;
+    string 学过的字加分隔符;
     string 学过意思;
+    string 学过意思加分隔符;
     string 学过的词性;
-    stringstream filename;
-    filename << i;
+    string 学过的词性加分隔符;
+    string filename;
+    string filename加分隔符;
+    int j;
+    j = i;
+    
     ifstream ifs;
 
 
-    for (int m = 1; m < i; m++) {
-        stringstream odfilename;
-        odfilename << m;
-        ifs.open(odfilename.str() + ".txt", ios::in);
-        字和意中的字 = 字和意中的字 + odfilename.str();
-        字和意中的意 = 字和意中的意 + odfilename.str();
-        字中的词性 = 字中的词性 + odfilename.str();
+    for (int m = 1; m < j; m++) {
+        string odfilename;
+        odfilename = to_string(m);
+        ifs.open(odfilename + ".txt", ios::in);
+        字和意中的字 = 字和意中的字 + odfilename;
+        字和意中的字加分隔符 = 字和意中的字加分隔符 + odfilename;
+        字和意中的意 = 字和意中的意 + odfilename;
+        字和意中的意加分隔符 = 字和意中的意加分隔符 + odfilename;
+        字中的词性 = 字中的词性 + odfilename;
+        字中的词性加分隔符 = 字中的词性加分隔符 + odfilename;
+        filename = filename + odfilename;
+        filename加分隔符 = filename加分隔符 + odfilename;
+
         ifs >> 字和意中的字;
-
+        ifs >> 字和意中的字加分隔符;
         ifs >> 字和意中的意;
-
+        ifs >> 字和意中的意加分隔符;
         ifs >> 字中的词性;
-
+        ifs >> 字中的词性加分隔符;
+        ifs >> filename;
+        ifs >> filename加分隔符;
         ifs.close();
         学过的字 += 字和意中的字.c_str();
+        学过的字加分隔符 += 字和意中的字加分隔符.c_str();
         学过意思 += 字和意中的意.c_str();
+        学过意思加分隔符 += 字和意中的意加分隔符.c_str();
         学过的词性 += 字中的词性.c_str();
+        学过的词性加分隔符 += 字中的词性加分隔符.c_str();
 
     }
 
 
     ofstream  ofs;
-    ofs.open(filename.str() + ".txt", ios::out | ios::trunc);
+    filename = to_string(j);
+    ofs.open(filename + ".txt", ios::out | ios::trunc);
     ofs << 学过的字 << endl;
+    ofs << 学过的字加分隔符 << endl;
     ofs << 学过意思 << endl;
+    ofs << 学过意思加分隔符 << endl;
     ofs << 学过的词性 << endl;
+    ofs << 学过的词性加分隔符 << endl;
+    ofs << filename << endl;
+    ofs << filename加分隔符 << endl;
     ofs.close();
 
 
 }
 void test02(string cm) {
     string 字和意中的字;
+    string 字和意中的字加分隔符;
     string 字和意中的意;
+    string 字和意中的意加分隔符;
     string 字中的词性;
+    string 字中的词性加分隔符;
     string 学过的字;
     string 句子大概意思;
-    
-    int id =  读取paperid();
+
+    int id = 读取paperid();
     for (int paidd = 1; paidd <= id; paidd++) {
-        stringstream filename;
-        filename << paidd;
+        string filename;
+        filename = to_string(paidd);
         ifstream ifs;
 
 
 
-        ifs.open(filename.str() + ".txt", ios::in);
+        ifs.open(filename + ".txt", ios::in);
         if (!ifs.is_open()) {
             cout << "系统：文件打开失败" << endl;
 
             return;
         }
 
-        字和意中的字 = 字和意中的字 + filename.str();
-        字和意中的意 = 字和意中的意 + filename.str();
-        字中的词性 = 字中的词性 + filename.str();
+        字和意中的字 = 字和意中的字 + filename;
+        字和意中的字加分隔符 = 字和意中的字加分隔符 + filename;
+        字和意中的意 = 字和意中的意 + filename;
+        字和意中的意加分隔符 = 字和意中的意加分隔符 + filename;
+        字中的词性 = 字中的词性 + filename;
+        字中的词性加分隔符 = 字中的词性加分隔符 + filename;
         ifs >> 字和意中的字;
-
+        ifs >> 字和意中的字加分隔符;
         ifs >> 字和意中的意;
+        ifs >> 字和意中的意加分隔符;
         ifs >> 字中的词性;
-
-        学过的字 += 字和意中的字.c_str();
-        句子大概意思 += 字和意中的意.c_str();
-        if (cm == 字和意中的字)
-        {
-
-            cout << "AI:我学过汉字有 : " << 字和意中的字 << endl;
-            cout << "AI:它的意思是 : " << 字和意中的意 << endl;
-            cout << "AI:它的词性是 : " << 字中的词性 << endl;
-            break;
-        }
-        else if (cm == 学过的字) {
-            cout << "AI:我学过汉字有 : " << 学过的字 << endl;
-            cout << "AI:它的意思是 : " << 句子大概意思 << endl;
-        }
-
-        else {
-            //cout << "AI:我知道这个字,并且调用了这个函数,但是文件中没有这些字，你可以教我认字吗";
-            continue;
-        }
+        ifs >> 字中的词性加分隔符;
         ifs.close();
-    }
-    if (学过的字.find(cm) != string::npos) {
+        学过的字 += 字和意中的字;
+        句子大概意思 += 字和意中的意;
 
-        cout << "AI:我学过汉字有 : " << cm << endl;
-        if (cm == 字和意中的字)
-        {
-            cout << "AI:它的意思是 : " << 句子大概意思 << endl;
+    }
+
+    if (cm == 字和意中的字)  //单个字学过判断
+    {
+
+        cout << "AI:我学过汉字有 : " << 字和意中的字 << endl;
+        cout << "AI:它的意思是 : " << 字和意中的意 << endl;
+        cout << "AI:它的词性是 : " << 字中的词性 << endl;
+    }
+    else if (cm == 学过的字) //输入内容完全匹配判断
+    {
+        cout << "AI:我学过汉字有 : " << 学过的字 << endl;
+        cout << "AI:它的意思是 : " << 句子大概意思 << endl;
+    }
+
+    else {
+        //cout << "AI:我知道这个字,并且调用了这个函数,但是文件中没有这些字，你可以教我认字吗";
+
+        //包含字判断
+        int count = 0;
+        string sameChars = "";
+        for (int i = 0; i < 学过的字.length(); i++) {
+            for (int j = 0; j < cm.length(); j++) {
+                if (学过的字[i] == cm[j]) {
+
+                    sameChars += 学过的字[i];
+                    count++;
+                    int mmm = count;
+                }
+            }
         }
 
+        if (学过的字.find(cm) != string::npos) {
+            cout << "AI:我还学过汉字有 : " << sameChars << endl;
+            if (sameChars == 学过的字)  //单个字学过判断
+            {
+                cout << "AI:它的词性是 : " << 句子大概意思 << endl;
+            }
+            //cout << "AI:它的意思是 : " << sameCharsmean << endl;
+        }
     }
+
+
 }
 
 // 函数实现测试
-void 菜单交互(string a1,string a2,string a3,string a4,int a5) {
-   string a11 = a1;
-   string    messages = a2;
+void 菜单交互(string a1, string a2, string a3, string a4, int a5) {
+    string a11 = a1;
+    string    messages = a2;
     string yn = a3;  //汉字
     string ym = "字的词性";
-   string  yx = a4;  //字的意思
-   int  paperid = a5;
+    string  yx = a4;  //字的意思
+    int  paperid = a5;
 
     if (a11 == messages) {
         cout << "AI:我知道这个字，但是忘记了大概意思是什么";
@@ -688,8 +867,8 @@ void 菜单交互(string a1,string a2,string a3,string a4,int a5) {
         }
         else if (i == 2) {
 
-            cout << "欢迎下次使用，按任意键退出";
-            exit;
+            cout<<"欢迎下次使用，按任意键退出";
+            exit(0);
         }
         else
         {
@@ -722,25 +901,21 @@ int main() {
     //test01();
     cout << "AI:我是AI机器人,请问有什么可以帮助你的吗？" << endl;
     string messages = "123";
+    int putskeyid = 0;
     cin >> messages;
+    putskeyid += 1;
     汉字 a;
-    string 汉字关键字=a.关联字 = "888";
-    string yn = "我";
+    string 汉字关键字 = a.方块字 = "方块字";
+    string yn = "我";  //教的汉字
     string ym = "字的词性";
     string yx = "词的词性";
-    a.意思 = yx;
-    int paperid=1;
+    //a.意思 = yx;
+
+    int paperid = 1;
     int ppaper_id = 读取paperid();
-    if (ppaper_id!=paperid && ppaper_id>0) {
-        paperid = ppaper_id;
-         菜单交互(汉字关键字, messages, yn, yx, paperid);
-    }
-    else {
-        paperid = 1;
-       
-         菜单交互(汉字关键字, messages, yn, yx, paperid);
-    }
-    
+    test04(messages, putskeyid);
+    test05(messages, myCallback);
+
     if (messages != "123")
     {
 
@@ -751,179 +926,191 @@ int main() {
     else {
         cout << messages << endl;
     }
-/*     菜单交互开始    */
-    /*
-    if (a.关联字 == messages) {
-        cout << "AI:我知道这个字，但是忘记了大概意思是什么";
-
+    if (ppaper_id != paperid && ppaper_id > 0) {
+        paperid = ppaper_id+1;
+        菜单交互(汉字关键字, messages, yn, yx, paperid);
     }
-    else
-    {
-        cout << "AI:我还没有学习更多内容，你可以教我吗？" << endl;
-        cout << "1为可以" << endl;
-        cout << "2为不可以" << endl;
-        int i = 0;
+    else {
+        paperid = 1;
 
-        cin >> i;
-
-        if (i == 1)
-        {
-
-            cout << "请输入单个汉字" << endl;
-            cin >> yn;
-            cout << "1，没有手误，继续教此汉字意思" << endl;
-            cout << "2,请选择" << yn << "的汉字的词性" << endl;
-            cout << "3，手误，换一个字教" << endl;
-
-            cout << "4,退出本次教学" << endl;
-            int t = 0;
-            cin >> t;
-            while (true)
-            {
+        菜单交互(汉字关键字, messages, yn, yx, paperid);
+    }
 
 
+    /*     菜单交互开始    */
+        /*
+        if (a.关联字 == messages) {
+            cout << "AI:我知道这个字，但是忘记了大概意思是什么";
 
-                if (t == 1) {
-                    cout << "请输入" << yn << "的汉语意思" << endl;
-                    cin >> a.意思;
-                    cout << "教学成功," << yn << "的汉语意思是：" << a.意思 << endl;
-                    cout << "1.教错了，更正并重新输入" << endl;
-                    cout << "2,请选择" << yn << "的汉字的词性" << endl;
-                    cout << "3.没有输入手误，继续教更多内容" << endl;
-                    cout << "4,退出本次教学" << endl;
-                    cin >> t;
-
-                }
-                else if (t == 2) {
-                    cout << "选项" << endl;
-                    cout << "A " << "名词 " << endl;
-                    cout << "B " << "动词 " << endl;
-                    cout << "C " << "形容词 " << endl;
-                    cout << "D " << "数词 " << endl;
-                    cout << "E " << "量词 " << endl;
-                    cout << "F " << "代词 " << endl;
-                    cout << "G " << "连词 " << endl;
-                    cout << "H " << "介词 " << endl;
-                    cout << "I " << "助词 " << endl;
-                    cout << "J " << "副词 " << endl;
-                    cout << "K " << " 叹词 " << endl;
-                    cin >> ym;
-
-
-                    if (ym == "A") {
-                        ym = "名词 ";
-
-                    }
-                    else if (ym == "B")
-                    {
-                        ym = "动词 ";
-
-                    }
-                    else if (ym == "C") {
-                        ym = "形容词 ";
-                    }
-                    else if (ym == "D")
-                    {
-                        ym = "数词 ";
-                    }
-                    else if (ym == "E")
-                    {
-                        ym = "量词 ";
-                    }
-                    else if (ym == "F")
-                    {
-                        ym = "代词 ";
-                    }
-                    else if (ym == "G")
-                    {
-                        ym = "连词 ";
-                    }
-                    else if (ym == "H")
-                    {
-                        ym = "介词 ";
-                    }
-                    else if (ym == "I")
-                    {
-                        ym = "助词 ";
-                    }
-                    else if (ym == "J")
-                    {
-                        ym = "副词 ";
-                    }
-                    else if (ym == "K")
-                    {
-                        ym = " 叹词 ";
-                    }
-                    else {
-                        cout << "输入错误，请从新输入" << endl;
-                    }
-                    //名词  动词   形容词   数词   量词   代词 ,连词  介词  助词  副词    叹词
-                    if (ym == "名词" || "动词 " || "形容词 " || "数词 " || "量词 " || "代词 " || "连词 " || "介词 " || "助词" || "副词" || "叹词")
-                    {
-                        cout << "你选择的是： " << ym << endl;
-                    }
-
-                    cout << "1.修改汉字意思" << endl;
-                    cout << "2,手误，重新输入汉字的词性" << endl;
-                    cout << "3.没有输入手误，继续教更多内容" << endl;
-                    cout << "4,退出本次教学" << endl;
-                    cin >> t;
-                    if (t == 3 || t == 4)
-                    {
-
-                        test01(yn, a.意思, ym, paperid);
-                        paperid = test01(yn, a.意思, yn, paperid);
-                        //cout << "paperid= " << paperid << endl;
-
-                    }
-                    if (t == 4)
-                    {
-                         记录paperid(paperid);
-                        test03(paperid);
-                        cout << "欢迎下次光临,如有疑问请联系邮箱：" << endl;
-                        cout << "kaiji234@outlook.com" << endl;
-                        cout << "再会!" << endl;
-                        //system("pause");
-                        //return 0;
-                    }
-
-                }
-                else if (t == 3) {
-
-                    cout << "请输入单个汉字" << endl;
-                    cin >> yn;
-                    cout << "1，没有手误，继续教此汉字意思" << endl;
-                    cout << "2,请选择" << yn << "的汉字的词性" << endl;
-                    cout << "3，手误，换一个字教" << endl;
-
-                    cout << "4,退出本次教学" << endl;
-                    cin >> t;
-
-                }
-                else if (t == 4) {
-                    break;
-                }
-                else {
-                    cout << "输入有误,请稍后再试";
-                    cin >> t;
-                    break;
-                }
-
-            }
-        }
-        else if (i == 2) {
-
-            cout << "欢迎下次使用，按任意键退出";
-            exit;
         }
         else
         {
-            cout << "输入有误，请重新输入数字";
-            cin >> i;
-        }
-    }
+            cout << "AI:我还没有学习更多内容，你可以教我吗？" << endl;
+            cout << "1为可以" << endl;
+            cout << "2为不可以" << endl;
+            int i = 0;
 
-    */
-/*菜单交互 结束*/
+            cin >> i;
+
+            if (i == 1)
+            {
+
+                cout << "请输入单个汉字" << endl;
+                cin >> yn;
+                cout << "1，没有手误，继续教此汉字意思" << endl;
+                cout << "2,请选择" << yn << "的汉字的词性" << endl;
+                cout << "3，手误，换一个字教" << endl;
+
+                cout << "4,退出本次教学" << endl;
+                int t = 0;
+                cin >> t;
+                while (true)
+                {
+
+
+
+                    if (t == 1) {
+                        cout << "请输入" << yn << "的汉语意思" << endl;
+                        cin >> a.意思;
+                        cout << "教学成功," << yn << "的汉语意思是：" << a.意思 << endl;
+                        cout << "1.教错了，更正并重新输入" << endl;
+                        cout << "2,请选择" << yn << "的汉字的词性" << endl;
+                        cout << "3.没有输入手误，继续教更多内容" << endl;
+                        cout << "4,退出本次教学" << endl;
+                        cin >> t;
+
+                    }
+                    else if (t == 2) {
+                        cout << "选项" << endl;
+                        cout << "A " << "名词 " << endl;
+                        cout << "B " << "动词 " << endl;
+                        cout << "C " << "形容词 " << endl;
+                        cout << "D " << "数词 " << endl;
+                        cout << "E " << "量词 " << endl;
+                        cout << "F " << "代词 " << endl;
+                        cout << "G " << "连词 " << endl;
+                        cout << "H " << "介词 " << endl;
+                        cout << "I " << "助词 " << endl;
+                        cout << "J " << "副词 " << endl;
+                        cout << "K " << " 叹词 " << endl;
+                        cin >> ym;
+
+
+                        if (ym == "A") {
+                            ym = "名词 ";
+
+                        }
+                        else if (ym == "B")
+                        {
+                            ym = "动词 ";
+
+                        }
+                        else if (ym == "C") {
+                            ym = "形容词 ";
+                        }
+                        else if (ym == "D")
+                        {
+                            ym = "数词 ";
+                        }
+                        else if (ym == "E")
+                        {
+                            ym = "量词 ";
+                        }
+                        else if (ym == "F")
+                        {
+                            ym = "代词 ";
+                        }
+                        else if (ym == "G")
+                        {
+                            ym = "连词 ";
+                        }
+                        else if (ym == "H")
+                        {
+                            ym = "介词 ";
+                        }
+                        else if (ym == "I")
+                        {
+                            ym = "助词 ";
+                        }
+                        else if (ym == "J")
+                        {
+                            ym = "副词 ";
+                        }
+                        else if (ym == "K")
+                        {
+                            ym = " 叹词 ";
+                        }
+                        else {
+                            cout << "输入错误，请从新输入" << endl;
+                        }
+                        //名词  动词   形容词   数词   量词   代词 ,连词  介词  助词  副词    叹词
+                        if (ym == "名词" || "动词 " || "形容词 " || "数词 " || "量词 " || "代词 " || "连词 " || "介词 " || "助词" || "副词" || "叹词")
+                        {
+                            cout << "你选择的是： " << ym << endl;
+                        }
+
+                        cout << "1.修改汉字意思" << endl;
+                        cout << "2,手误，重新输入汉字的词性" << endl;
+                        cout << "3.没有输入手误，继续教更多内容" << endl;
+                        cout << "4,退出本次教学" << endl;
+                        cin >> t;
+                        if (t == 3 || t == 4)
+                        {
+
+                            test01(yn, a.意思, ym, paperid);
+                            paperid = test01(yn, a.意思, yn, paperid);
+                            //cout << "paperid= " << paperid << endl;
+
+                        }
+                        if (t == 4)
+                        {
+                             记录paperid(paperid);
+                            test03(paperid);
+                            cout << "欢迎下次光临,如有疑问请联系邮箱：" << endl;
+                            cout << "kaiji234@outlook.com" << endl;
+                            cout << "再会!" << endl;
+                            //system("pause");
+                            //return 0;
+                        }
+
+                    }
+                    else if (t == 3) {
+
+                        cout << "请输入单个汉字" << endl;
+                        cin >> yn;
+                        cout << "1，没有手误，继续教此汉字意思" << endl;
+                        cout << "2,请选择" << yn << "的汉字的词性" << endl;
+                        cout << "3，手误，换一个字教" << endl;
+
+                        cout << "4,退出本次教学" << endl;
+                        cin >> t;
+
+                    }
+                    else if (t == 4) {
+                        break;
+                    }
+                    else {
+                        cout << "输入有误,请稍后再试";
+                        cin >> t;
+                        break;
+                    }
+
+                }
+            }
+            else if (i == 2) {
+
+                cout << "欢迎下次使用，按任意键退出";
+                exit;
+            }
+            else
+            {
+                cout << "输入有误，请重新输入数字";
+                cin >> i;
+            }
+        }
+
+        */
+        /*菜单交互 结束*/
 
 }
+
