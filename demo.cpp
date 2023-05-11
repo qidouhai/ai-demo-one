@@ -9,6 +9,10 @@ using namespace std;
 
 #include<sstream>
 
+#include <algorithm>
+
+#include <map>
+
 //声明字符类
 class zifu {
 public:
@@ -414,21 +418,60 @@ void test04(string someworld, int id) {
 void test05(string str, void callback(size_t)) {
     string sworlds = str;
     size_t num = sworlds.length();
-   // int nums = static_cast<int>(sworlds.length());
+    // int nums = static_cast<int>(sworlds.length());
     string chars = "abcefgiklmopqrstuvwxyz!@#$%^&*-=\"?[]~|()_+'/{}`<>\\;:12345790 ";
     testfindback(sworlds, chars, callback);
 }
+//适用于windows 十六进制方式提取分割汉字和统计汉字数量
+void  test16(string s) {
+    string t;
+    int count = 0;
+    for (int i = 0; i < s.length(); i++) // UTF-16编码中，中文占用2个字节
+    {
+        if ((unsigned char)s[i] < 0x80) // ASCII字符的最高位为0，UTF-16编码为1字节
+        {
+            t.append(s.substr(i, 1));
+            t.append("/");
+        }
+        else if ((unsigned char)s[i] == 0xFFFE)  // 中文的第一个字节的最高位为0*FFFE，则为小端序，UTF-16编码为2字节
+        {
+            t.append(s.substr(i, 2));
+            t.append("/");
+            i += 1;
+        }
+        else if ((unsigned char)s[i] == 0xFEFF){   // 文章开头为0xFEFF，则为大端序,UTF-16编码为2字节
+            
+                t.append(s.substr(2, i));
+                t.append("/");
+                i += 1;
+                count++;
+        }
+        else
+        {
+            t.append(s.substr(i, 2));
+            t.append("/");
+            i += 1;
+            count++;
+        }
+    }
+    //cout << t << endl;
+    //return t;
+    cout << "test16汉字个数是" << count << endl;
+    cout << "test16可以分割成为" << t << endl;
 
-//提取字符串中的汉字及个数
-string test06(string s) {
+
+}
+//提取字符串中的汉字及个数  //适用于linux 的汉字统计和 汉字分割
+//windows vs  中分割汉字会显示乱码
+void  test06(string s) {
     string t;
     int count = 0;
     for (int i = 0; i < s.length(); i++) // UTF-8编码中，中文占用3个字节
     {
         if ((unsigned char)s[i] < 0x80) // ASCII字符的最高位为0，UTF-8编码为1字节
         {
-            //t.append(s.substr(i, 1));
-           // t.append("/");
+            t.append(s.substr(i, 1));
+            t.append("/");
         }
         else if ((unsigned char)s[i] < 0xE0) // 中文的第一个字节的最高位为110，UTF-8编码为3字节
         {
@@ -450,21 +493,194 @@ string test06(string s) {
         }
     }
     //cout << t << endl;
-    return t;
-    //cout<<"汉字个数是"<<count<<endl;
+    //return t;
+    cout << "test06汉字个数是" << count << endl;
+    cout << "test06可以分割成为" << t << endl;
+
 
 }
 
+//下面是一个简单的示例 utf16_to_utf8 函数的实现，用于将 UTF - 16 编码转化为 UTF - 8 编码：
+
+
+string utf16_to_utf8(const wstring& utf16_string) {
+    string utf8_string;
+    for (size_t i = 0; i < utf16_string.length(); i++) {
+        uint32_t c = static_cast<uint32_t>(utf16_string[i]);
+        if (c <= 0x7F) {
+            // Single-byte UTF-8 character
+            utf8_string += static_cast<char>(c);
+        }
+        else if (c <= 0x7FF) {
+            // Two-byte UTF-8 character
+            utf8_string += static_cast<char>((c >> 6) | 0xC0);
+            utf8_string += static_cast<char>((c & 0x3F) | 0x80);
+        }
+        else if (c <= 0xFFFF) {
+            // Three-byte UTF-8 character
+            utf8_string += static_cast<char>((c >> 12) | 0xE0);
+            utf8_string += static_cast<char>(((c >> 6) & 0x3F) | 0x80);
+            utf8_string += static_cast<char>((c & 0x3F) | 0x80);
+        }
+        else if (c <= 0x10FFFF) {
+            // Four-byte UTF-8 character
+            utf8_string += static_cast<char>((c >> 18) | 0xF0);
+            utf8_string += static_cast<char>(((c >> 12) & 0x3F) | 0x80);
+            utf8_string += static_cast<char>(((c >> 6) & 0x3F) | 0x80);
+            utf8_string += static_cast<char>((c & 0x3F) | 0x80);
+        }
+        else {
+            // Invalid character
+            utf8_string += '\xEF';
+            utf8_string += '\xBF';
+            utf8_string += '\xBD';
+        }
+    }
+    return utf8_string;
+}
+
+
+void test08(wstring c) {
+    wstring t;
+    for (int i = 0; i < c.length(); i++) {
+        if ((unsigned)c[i] < 127) {
+            t += (wchar_t)' ';
+        }
+        else {
+            t += c[i];
+        }
+    }
+    t.erase(remove_if(t.begin(), t.end(), [](wchar_t s) { return (unsigned)s < 127; }), t.end());
+    cout << "test08你输入的汉字有: " << utf16_to_utf8(t) << endl;
+    cout << "有" << count_if(t.begin(), t.end(), [](wchar_t s) {return (unsigned)s >= 127; }) << "个汉字" << endl;
+}
+
+//字符串处理方法2
+/*
+
+void test001(string str,char * s)
+{
+
+    char b;
+    string 非中文;
+        int len=str.length();
+        for(int t=0;t<len;t++)
+        {
+        b = *s++;
+        //如果到字符串尾 则说明没有中文字符
+        if (b == 0){
+            非中文+=b;
+            }
+
+          if (*s & 0 * 80)
+          {
+          t++;
+            }
+            else if (b & 0 * 80){
+                if (*s & 0 * 80)
+            }else
+        //如果字符串高位为1  且下一字符高位
+        //也是1 则有中文字符
+        if (b & 0 * 80){
+            if (*s & 0 * 80)
+               cout<<1;
+                        }
+            }
+
+    cout<< 0;
+}
+
+*/
+
+//linux 下汉字数量不准  //适用于wIndows VS中的汉字提取和汉字数量统计
+int IncludeChinese(char* s)
+{
+    // char* s = new char[c.length() + 1];
+
+    // strcpy_s(s, c.length() + 1, c.c_str());
+    char b;
+
+    while (1)
+    {
+        b = *s++;
+        //如果到字符串尾 则说明没有中文字符
+        if (b == 0) break;
+        //如果字符串高位为1  且下一字符高位
+        //也是1 则有中文字符
+        if (b & 0 * 80)
+            if (*s & 0 * 80)
+                return 1;
+    }
+    return 0;
+}
+void test07(string c) {
+
+    char s[1024] = { 0 };
+    for (int f = 0; f < c.length(); f++) {
+
+        s[f] = c[f];
+
+    }
+    string t;
+    string tm;
+    long long time = 0;
+    for (int i = 0; i < sizeof(s); i++) {
+        if (s[i] >= 0 && s[i] <= 127) //不是全角字符
+        {
+            // s[i] = ' ';
+             //cout << s[i] << endl;
+            tm += s[i];
+        }
+
+        else time++;
+        t += s[i];
+    }
+
+    t.erase(remove_if(t.begin(), t.end(), [](char s) { return (unsigned char)s < 127; }), t.end());
+    t.erase(remove_if(t.begin(), t.end(), [](char s) { return (unsigned char)s == 32; }), t.end());
+    ;
+
+
+    cout << "test07你输入的英文有: " << tm << endl;
+    cout << "test07你输入的汉字有: " << t << endl;
+    long long times;
+
+    times = t.size();
+    cout << "有" << (time / 2) << "个汉字" << endl;
+    cout << "有t.size" << t.size() << "个汉字" << endl;
+    cout << "有tm.size" << tm.size() << "个非汉字" << endl;
+    cout << "有t.length" << t.length() << "个汉字" << endl;
+    cout << "有sizeof(tm)" << sizeof(tm) << "个非汉字" << endl;
+    cout << "有sizeof(t)" << sizeof(t) << "个汉字" << endl;
+    cout << "有tm.length" << tm.length() << "个非汉字" << endl;
+}
+
+
 //3句子分析 句子结构 句子成分 句子分解 
+//nlp
+//这个涉及到了分词，估计需要向后排
 
 //4将句子分割后的单个字 按照类格式存到临时文本
 
      /*test01基本实现教过的文字内容保存到文本
      而这一条要实现的是对话中的句子*/
+// 这个初期阶段 应该是“你们好”
+// 他们好、在吗、再见、等等通用词语和简单无词汇的分割字组成阶段
+// 例如：再见，需要把“再”和“见”分开来分别保存到txt
+// 而文本中为再见句子存档
+// 为后期的模型抽象进行的资料库存储
+     
+//5根据单个字符 翻译成意思集合
+//前期的数据结构先设计为字典+map+链表
+//字典存字     链表/数组容器  存确切的属性内容
+void 字典(string a,string b) {
+    map<string, string> dict;
 
-     //5根据单个字符 翻译成意思集合
 
-     //6通过模型或经验对句子意思进行优化，使其成为正确句子
+
+}
+
+//6通过模型或经验对句子意思进行优化，使其成为正确句子
      /*这是理解句子的阶段，如果无法理解则需要用户详细描述*/
 
 
@@ -561,7 +777,7 @@ void test03(int i) {
     string filename加分隔符;
     int j;
     j = i;
-    
+
     ifstream ifs;
 
 
@@ -725,30 +941,27 @@ void 菜单交互(string a1, string a2, string a3, string a4, int a5) {
 
             cout << "请输入单个汉字" << endl;
             cin >> yn;
-            cout << "1，没有手误，继续教此汉字意思" << endl;
-            cout << "2,请选择" << yn << "的汉字的词性" << endl;
-            cout << "3，手误，换一个字教" << endl;
-
-            cout << "4,退出本次教学" << endl;
+            cout << "请输入1,为："  << yn << " 选择汉字的词性" << endl;
+            
+            int tt = 0;
             int t = 0;
-            cin >> t;
+            cin >> tt;
+            if (tt != 1) {
+                cout << "请输入1,为：" << yn << " 选择汉字的词性" << endl;
+                exit (1);
+            }
+            else {
+                t=tt;
+            }
+            
+           
             while (true)
             {
 
 
 
+            
                 if (t == 1) {
-                    cout << "请输入" << yn << "的汉语意思" << endl;
-                    cin >> yx;
-                    cout << "教学成功," << yn << "的汉语意思是：" << yx << endl;
-                    cout << "1.教错了，更正并重新输入" << endl;
-                    cout << "2,请选择" << yn << "的汉字的词性" << endl;
-                    cout << "3.没有输入手误，继续教更多内容" << endl;
-                    cout << "4,退出本次教学" << endl;
-                    cin >> t;
-
-                }
-                else if (t == 2) {
                     cout << "选项" << endl;
                     cout << "A " << "名词 " << endl;
                     cout << "B " << "动词 " << endl;
@@ -809,18 +1022,31 @@ void 菜单交互(string a1, string a2, string a3, string a4, int a5) {
                         ym = " 叹词 ";
                     }
                     else {
-                        cout << "输入错误，请从新输入" << endl;
+                        cout << "输入有误" << endl;
+                        exit(1);
                     }
                     //名词  动词   形容词   数词   量词   代词 ,连词  介词  助词  副词    叹词
                     if (ym == "名词" || "动词 " || "形容词 " || "数词 " || "量词 " || "代词 " || "连词 " || "介词 " || "助词" || "副词" || "叹词")
                     {
                         cout << "你选择的是： " << ym << endl;
                     }
-
-                    cout << "1.修改汉字意思" << endl;
-                    cout << "2,手误，重新输入汉字的词性" << endl;
-                    cout << "3.没有输入手误，继续教更多内容" << endl;
+                    
+                    cout << "1,手误，重新输入汉字的词性" << endl;
+                    cout << "2.输入汉字意思" << endl;
+                    cout << "3.换个汉字教" << endl;
                     cout << "4,退出本次教学" << endl;
+                    cin >> t;
+                    
+
+                }
+                else   if (t == 2) {
+                    cout << "请输入" << yn << "的汉语意思" << endl;
+                    cin >> yx;
+                    cout << "教学成功," << yn << "的汉语意思是：" << yx << endl;
+                    cout << "1,修改" << yn << "的汉字的词性" << endl; 
+                    cout << "2.教错了，更正并重新输入" << endl;
+                    cout << "3.保存并继续教更多内容" << endl;
+                    cout << "4,保存并退出" << endl;
                     cin >> t;
                     if (t == 3 || t == 4)
                     {
@@ -840,14 +1066,14 @@ void 菜单交互(string a1, string a2, string a3, string a4, int a5) {
                         //system("pause");
                         //return 0;
                     }
-
                 }
                 else if (t == 3) {
 
                     cout << "请输入单个汉字" << endl;
                     cin >> yn;
-                    cout << "1，没有手误，继续教此汉字意思" << endl;
-                    cout << "2,请选择" << yn << "的汉字的词性" << endl;
+                    
+                    cout << "1,请选择" << yn << "的汉字的词性" << endl; 
+                    cout << "2，输入汉字意思" << endl;
                     cout << "3，手误，换一个字教" << endl;
 
                     cout << "4,退出本次教学" << endl;
@@ -867,7 +1093,7 @@ void 菜单交互(string a1, string a2, string a3, string a4, int a5) {
         }
         else if (i == 2) {
 
-            cout<<"欢迎下次使用，按任意键退出";
+            cout << "欢迎下次使用，按任意键退出";
             exit(0);
         }
         else
@@ -902,8 +1128,10 @@ int main() {
     cout << "AI:我是AI机器人,请问有什么可以帮助你的吗？" << endl;
     string messages = "123";
     int putskeyid = 0;
-    cin >> messages;
+    getline(cin, messages);
+    // cin >> messages;
     putskeyid += 1;
+
     汉字 a;
     string 汉字关键字 = a.方块字 = "方块字";
     string yn = "我";  //教的汉字
@@ -916,6 +1144,19 @@ int main() {
     test04(messages, putskeyid);
     test05(messages, myCallback);
 
+    //test07测试 
+    char* mstr = (char*)messages.c_str();
+
+    IncludeChinese(mstr);
+
+    test07(messages);
+    //
+    test06(messages);
+    cout << "下面是16进制猜测windows vs执行的进制测试" << endl;
+    test16(messages);
+    //
+
+
     if (messages != "123")
     {
 
@@ -927,7 +1168,7 @@ int main() {
         cout << messages << endl;
     }
     if (ppaper_id != paperid && ppaper_id > 0) {
-        paperid = ppaper_id+1;
+        paperid = ppaper_id + 1;
         菜单交互(汉字关键字, messages, yn, yx, paperid);
     }
     else {
@@ -1113,4 +1354,3 @@ int main() {
         /*菜单交互 结束*/
 
 }
-
