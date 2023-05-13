@@ -386,6 +386,168 @@ void 主谓宾句子(string x,string y,string z) {
 };
 */
 
+//字典部分开始
+//a-z字典 用于用户初次使用 本地没有数据时 进行初次调用构建
+void 初始化小写az数英字典() {
+    map<int, string> nazdict;
+    nazdict['1'] = {"a"};
+    nazdict['2'] = { "b" };
+    nazdict['3'] = { "c" };
+    nazdict['4'] = { "d" };
+    nazdict['5'] = { "e" };
+    nazdict['6'] = { "f" };
+    nazdict['7'] = { "g" };
+    nazdict['8'] = { "h" };
+    nazdict['9'] = { "i" };
+    nazdict['10'] = { "j" };
+    nazdict['11'] = { "k" };
+    nazdict['12'] = { "l" };
+    nazdict['13'] = { "m" };
+    nazdict['14'] = { "n" };
+    nazdict['15'] = { "o" };
+    nazdict['16'] = { "p" };
+    nazdict['17'] = { "q" };
+    nazdict['18'] = { "r" };
+    nazdict['19'] = { "s" };
+    nazdict['20'] = { "t" };
+    nazdict['21'] = { "u" };
+    nazdict['22'] = { "v" };
+    nazdict['23'] = { "w" };
+    nazdict['24'] = { "x" };
+    nazdict['25'] = { "y" };
+    nazdict['26'] = { "z" };
+
+    ofstream file("小写az数英字典.txt"); // 打开一个文件进行写入操作
+    if (file.is_open()) { // 如果文件成功打开
+        for (const auto& pair:nazdict) { // 遍历字典中的所有元素
+            file << pair.first << " " << pair.second << endl; // 将键值对写入文件中
+        }
+        file.close(); // 关闭文件
+        cout << "az数英字典初始化成功" << endl;
+    }
+    else {
+        std::cerr << "az数英字典失败" << endl;
+    }
+
+}
+
+//A-Z字典 用于用户初次使用 本地没有数据时 进行初次调用构建
+void 初始化大写AZ数英字典() {
+    map<int, string> nAZdict;
+   
+    nAZdict['1'] = { "A" };
+    nAZdict['2'] = { "B" };
+    nAZdict['3'] = { "C" };
+    nAZdict['4'] = { "D" };
+    nAZdict['5'] = { "E" };
+    nAZdict['6'] = { "F" };
+    nAZdict['7'] = { "G" };
+    nAZdict['8'] = { "H" };
+    nAZdict['9'] = { "I" };
+    nAZdict['10'] = { "J" };
+    nAZdict['11'] = { "K" };
+    nAZdict['12'] = { "L" };
+    nAZdict['13'] = { "M" };
+    nAZdict['14'] = { "N" };
+    nAZdict['15'] = { "O" };
+    nAZdict['16'] = { "P" };
+    nAZdict['17'] = { "Q" };
+    nAZdict['18'] = { "R" };
+    nAZdict['19'] = { "S" };
+    nAZdict['20'] = { "T" };
+    nAZdict['21'] = { "U" };
+    nAZdict['22'] = { "V" };
+    nAZdict['23'] = { "W" };
+    nAZdict['24'] = { "X" };
+    nAZdict['25'] = { "Y" };
+    nAZdict['26'] = { "Z" };
+
+    ofstream file("大写AZ数英字典.txt"); // 打开一个文件进行写入操作
+    if (file.is_open()) { // 如果文件成功打开
+        for (const auto& pair : nAZdict) { // 遍历字典中的所有元素
+            file << pair.first << " " << pair.second << endl; // 将键值对写入文件中
+        }
+        file.close(); // 关闭文件
+        cout << "AZ数英字典初始化成功" << endl;
+    }
+    else {
+        std::cerr << "AZ数英字典初始化失败" << endl;
+    }
+}
+
+//英文符号字典 用于用户初次使用 本地没有数据时 进行初次调用构建
+void 初始化英文符号数英符号字典() {
+    map<int, string> nefuhaodict;
+    nefuhaodict['1'] = { "," };
+    nefuhaodict['2'] = { "." };
+    nefuhaodict['3'] = { "/" };
+    nefuhaodict['4'] = { "\\" };
+    nefuhaodict['5'] = { "'" };
+    nefuhaodict['6'] = { "|" };
+    nefuhaodict['7'] = { "\"" };
+    nefuhaodict['8'] = { ";" };
+    nefuhaodict['9'] = { ":" };
+    nefuhaodict['10'] = { "]" };
+    nefuhaodict['11'] = { "[" };
+    nefuhaodict['12'] = { "}" };
+    nefuhaodict['13'] = { "{" };
+    nefuhaodict['14'] = { "+" };
+    nefuhaodict['15'] = { "-" };
+    nefuhaodict['16'] = { "*" };
+    nefuhaodict['17'] = { "=" };
+    nefuhaodict['18'] = { ")" };
+    nefuhaodict['19'] = { "(" };
+    nefuhaodict['20'] = { "*" };
+    nefuhaodict['21'] = { "&" };
+    nefuhaodict['22'] = { "^" };
+    nefuhaodict['23'] = { "%" };
+    nefuhaodict['24'] = { "$" };
+    nefuhaodict['25'] = { "#" };
+    nefuhaodict['26'] = { "@" };
+    nefuhaodict['25'] = { "!" };
+    nefuhaodict['26'] = { "`" };
+    nefuhaodict['26'] = { "~" };
+    
+
+    ofstream file("英文符号数英符号字典.txt"); // 打开一个文件进行写入操作
+    if (file.is_open()) { // 如果文件成功打开
+        for (const auto& pair : nefuhaodict) { // 遍历字典中的所有元素
+            file << pair.first << " " << pair.second << endl; // 将键值对写入文件中
+        }
+        file.close(); // 关闭文件
+        cout << "英文符号数英符号字典初始化成功" << endl;
+    }
+    else {
+        std::cerr << "英文符号数英符号字典初始化失败" << endl;
+    }
+}
+
+//中文符号字典 用于用户初次使用 本地没有数据时 进行初次调用构建
+void 初始化中文符号数中符号字典() {
+    map<int, string> zfuhaodict;
+
+}
+
+//中文汉字字典 用于用户初次使用 本地没有数据时 进行初次调用构建
+void 初始化中文汉字数字汉字字典() {
+    map<int, string> hanzidict;
+
+}
+
+//中文词语字典 用于用户初次使用 本地没有数据时 进行初次调用构建
+void 初始化中文词语数中词语字典() {
+    map<int, string> ciyudict;
+
+}
+
+//中文成语字典 用于用户初次使用 本地没有数据时 进行初次调用构建
+void 初始化中文成语数中成语字典() {
+    map<int, string> chengyudict;
+
+}
+
+//字典部分结束
+
 void testfindback(string str, string chars, void  callback(size_t)) {
     string strstr = str;
     string strchars = chars;
@@ -675,6 +837,7 @@ void test07(string c) {
 //字典存字     链表/数组容器  存确切的属性内容
 void 字典(string a,string b) {
     map<string, string> dict;
+    
 
 
 
@@ -682,7 +845,18 @@ void 字典(string a,string b) {
 
 //6通过模型或经验对句子意思进行优化，使其成为正确句子
      /*这是理解句子的阶段，如果无法理解则需要用户详细描述*/
+//字符串的字，字的含义，字的词性，字的用法，字的近义词，字的反义词，字的关联字词，字关联字词的含义，字的例句，字的关联字词句的权重，字使用掌握的熟练度，字可能会出现的位置（从0开始冒泡排序），字的使用场景，字的人工监督学习相关内容，字的实物映射，字的网址，字的专用有名词的返回值，字的心理学字典返回值，字的句子结构，字所处于机器人所属的显卡taken，机器人显卡与机器人的taken匹配度，字数限制
+void 句子的含义(string 汉字, string 字的意思,string 字的词性,string 字的近义词,int 字的位置,string 字的关联字词,string 字的例句,string 字的专用有名词的返回值,string 字的句子结构,int 字数限制) {
+    //字的词性按照罗列出来
+    //句子结构，根据词性匹配出合适的句子结构
+    //对单个汉字的意思进行特殊解读后提炼出来字的意思的关键词及含义，然后赋值给当前的句子
+    //根据句子缺少的内容 让AI 根据理解进行选词填空（填写对和填写错都会进行记录，错误和正确都用红黑线条表示，而红黑线条的粗线表示对其了解和掌握的程度，而红黑线条可以用数字代替或者一些数据结构等）（答对则会增加自驱动更新模型中的能力值增加1，能力增加表示AI 越强大，获得的溢出越多，包括心情，和健康值，以及对生命值的延长都有意义）
 
+    //很明显 这里需要字典 ，所以要补字典数据（放到上面吧）
+
+
+
+}
 
      //字符串查找
      /* string str1 = "好大啊";
@@ -1113,6 +1287,11 @@ int main() {
     //当无法正常使用时，需要进行机器人异常修正工作
     //机器人出现思想动态变更时，会在开机时进行检测
     //当机器人的正常值范围出现异常时，会开机进行报告
+
+
+    //初始化
+   初始化小写az数英字典();
+   初始化大写AZ数英字典();
 
     //下面是随机测试
     /*
