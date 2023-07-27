@@ -15,3 +15,26 @@ at 2023-5-7
 https://gitee.com/qihai/ai-demo-one
 
 at 2023-06-01
+
+
+欢迎大佬们一起编写
+
+联系我：
+
+web：
+http://hihot.cn
+
+Q群：
+103330676
+
+消息推送：
+ https://api.day.app/ZkbZzfhPLLbn3SseGMsX9J/这里改成你要说的话
+ 
+ICQ:
+@Tinging
+
+email邮箱:
+kaiji234@outlook.com
+qidouhaii@163.com
+
+at 2023-7-27
